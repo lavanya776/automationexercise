@@ -1,4 +1,4 @@
-# GOQii QA Assessment – Task 3: UI Automation (Playwright + JavaScript)
+# UI Automation (Playwright + JavaScript)
 
 UI automation for **https://automationexercise.com**. It uses Playwright Test, the Page Object Model and custom fixtures. There is one end-to-end test for the happy path and four negative tests.
 
