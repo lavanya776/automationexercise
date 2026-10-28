@@ -1,0 +1,19 @@
+{
+  "name": "goqii-playwright-automation",
+  "version": "1.0.0",
+  "description": "GOQii QA assessment - Playwright E2E automation (login, search, cart, logout) on automationexercise.com",
+  "private": true,
+  "scripts": {
+    "install:browsers": "playwright install chromium",
+    "test": "playwright test",
+    "test:e2e": "playwright test --grep @e2e",
+    "test:negative": "playwright test --grep @negative",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "dotenv": "^16.4.5"
+  }
+}
