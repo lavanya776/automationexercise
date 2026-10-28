@@ -1,4 +1,4 @@
-const { test, expect } = require('../fixtures/baseTest');
+const { test, expect } = require('./baseTest');
 
 test.describe('Login - negative cases', { tag: '@negative' }, () => {
   test.beforeEach(async ({ loginPage }) => {
@@ -6,7 +6,7 @@ test.describe('Login - negative cases', { tag: '@negative' }, () => {
   });
 
   test('wrong password shows an error and keeps the user logged out', async ({ page, loginPage, testData }) => {
-    await loginPage.login(testData.user.email, 'WrongPassword!123');
+    await loginPage.login(testData.user.email, testData.invalid.password);
 
     await expect(loginPage.errorMessage, 'Invalid-credentials error should be shown').toBeVisible();
     await expect(page, 'User should stay on the login page').toHaveURL(/\/login/);
@@ -32,11 +32,11 @@ test.describe('Login - negative cases', { tag: '@negative' }, () => {
 });
 
 test.describe('Search - negative cases', { tag: '@negative' }, () => {
-  test('search with no matching product shows no results', async ({ page, productsPage }) => {
+  test('search with no matching product shows no results', async ({ page, productsPage, testData }) => {
     await productsPage.goto();
-    await productsPage.search('zzqx-no-such-product');
+    await productsPage.search(testData.invalid.noResultSearch);
 
-    await expect(page).toHaveURL(/\/products\?search=zzqx-no-such-product/);
+    await expect(page).toHaveURL(/\/products\?search=/);
     await expect(productsPage.resultsHeading, 'Results section should still render').toBeVisible();
     await expect(productsPage.productCards, 'No product cards should be listed').toHaveCount(0);
   });

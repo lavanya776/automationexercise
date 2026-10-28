@@ -1,4 +1,4 @@
-const { test, expect } = require('../fixtures/baseTest');
+const { test, expect } = require('./baseTest');
 
 test('user can log in, search a product, add it to cart, verify cart and log out', { tag: '@e2e' }, async ({
   page, loginPage, productsPage, cartPage, testData,

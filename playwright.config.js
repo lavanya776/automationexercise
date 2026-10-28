@@ -4,7 +4,6 @@ const { testData } = require('./utils/testData');
 
 module.exports = defineConfig({
   testDir: './tests',
-  globalSetup: require.resolve('./utils/globalSetup'),
   timeout: 60_000,
   expect: { timeout: 10_000 },
   fullyParallel: false,

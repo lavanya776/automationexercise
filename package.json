@@ -1,7 +1,7 @@
 {
-  "name": "goqii-playwright-automation",
+  "name": "playwright-automation",
   "version": "1.0.0",
-  "description": "GOQii QA assessment - Playwright E2E automation (login, search, cart, logout) on automationexercise.com",
+  "description": "Playwright E2E automation (login, search, cart, logout) on automationexercise.com",
   "private": true,
   "scripts": {
     "install:browsers": "playwright install chromium",

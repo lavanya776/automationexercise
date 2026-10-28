@@ -26,12 +26,13 @@ The brief asks for a single end-to-end flow, so this is one test. Each step is a
 | Empty email field | The browser's required-field validation blocks the form (`checkValidity()` is false); nothing is submitted |
 | Search with no matches | The results section renders with 0 product cards |
 
-## Fixtures: `fixtures/baseTest.js`
+## Fixtures: `tests/baseTest.js`
 
-The specs import `test` and `expect` from `fixtures/baseTest.js` instead of `@playwright/test`. This file extends Playwright's `test` with:
+The specs import `test` and `expect` from `tests/baseTest.js` instead of `@playwright/test`. This file extends Playwright's `test` with:
 
 - `loginPage`, `productsPage`, `cartPage`: page objects injected into each test
 - `testData`: the configurable test data
+- `ensureTestUser`: an **auto, worker-scoped** fixture that creates the demo account through the site API if it does not exist (see limitations below)
 - `blockAds`: an **auto** fixture that blocks ad domains for every test, so no spec has to remember to do it
 
 ## Project structure
@@ -43,14 +44,12 @@ goqii-playwright-automation/
 │   ├── LoginPage.js       # login form
 │   ├── ProductsPage.js    # search, product cards, add to cart, "Added!" modal
 │   └── CartPage.js        # cart rows, quantity, clearing the cart
-├── fixtures/
-│   └── baseTest.js        # page-object, test-data and auto ad-blocking fixtures
 ├── tests/
+│   ├── baseTest.js             # base test: fixtures (page objects, test data, account setup, ad blocking)
 │   ├── checkout-flow.spec.js   # end-to-end happy path
 │   └── negative.spec.js        # invalid login, empty field, no-result search
 ├── utils/
-│   ├── testData.js        # configurable test data (env / .env overrides)
-│   └── globalSetup.js     # creates the demo user through the site's API if it does not exist
+│   └── testData.js        # all test data: credentials, required sign-up fields only, products, invalid inputs
 ├── playwright.config.js
 ├── package.json
 ├── .env.example
@@ -119,7 +118,7 @@ The browser runs **headed** (visible) by default, set by `headless: false` in `p
 
 ## Website notes and limitations
 
-- **No shared demo account.** automationexercise.com has no published demo login. Before the run, `utils/globalSetup.js` calls the site's public API (`POST /api/verifyLogin`, then `POST /api/createAccount` if needed) so the user above exists. This means the project runs from a clean setup with no manual sign-up. If someone else has registered the default email with a different password, set your own `TEST_USER_EMAIL` and `TEST_USER_PASSWORD`.
+- **No shared demo account.** automationexercise.com has no published demo login. Before the tests, the `ensureTestUser` fixture in `tests/baseTest.js` (runs automatically, once per worker) calls the site's public API (`POST /api/verifyLogin`, then `POST /api/createAccount` if needed) so the user above exists. This means the project runs from a clean setup with no manual sign-up. If someone else has registered the default email with a different password, set your own `TEST_USER_EMAIL` and `TEST_USER_PASSWORD`.
 - **The cart persists for the account.** Items stay in the account's cart between runs, so the test empties the cart first. This keeps the "quantity = 1" check reliable.
 - **Ads are blocked.** The site loads Google ads, including full-screen vignettes, that can block clicks. Ad and analytics domains are blocked at the network level in `BasePage.blockAds`. This does not affect any feature under test.
 - **Search reloads the page with JavaScript.** `ProductsPage.search()` waits for the results page `load` event so the site's add-to-cart handlers are attached before the test clicks.
